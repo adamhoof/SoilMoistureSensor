@@ -50,8 +50,6 @@ void setOnWakeUpHandlers()
 
 void setup()
 {
-    Serial.begin(115200);
-
     WifiController wifiController = WifiController();
     wifiController.setHostname(hostname).setSSID(wiFiSSID).setPassword(wiFiPassword);
     wifiController.connect();
@@ -94,7 +92,7 @@ void setup()
         strcat(final_publish_topic, update.plant_name);
 
         bool successfulPublish = mqttClient.publish(final_publish_topic, json_buffer, true);
-        while (!successfulPublish){
+        while (!successfulPublish) {
             mqttClient.disconnect();
             mqttClient.connect(hostname);
             delay(100);
@@ -112,6 +110,4 @@ void setup()
 }
 
 void loop()
-{
-
-}
+{}
