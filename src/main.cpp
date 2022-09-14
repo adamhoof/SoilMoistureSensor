@@ -7,7 +7,7 @@
 #include <OTAHandler.h>
 
 #define uS_TO_S_FACTOR 1000000ULL
-#define TIME_TO_SLEEP /*12*60*60*/5
+#define TIME_TO_SLEEP 12*60*60
 
 void setOnWakeUpHandlers()
 {
@@ -93,7 +93,15 @@ void setup()
         strcpy(final_publish_topic, publish_topic);
         strcat(final_publish_topic, update.plant_name);
 
-        mqttClient.publish(final_publish_topic, json_buffer, true);
+        bool successfulPublish = mqttClient.publish(final_publish_topic, json_buffer, true);
+        while (!successfulPublish){
+            mqttClient.disconnect();
+            mqttClient.connect(hostname);
+            delay(100);
+            successfulPublish = mqttClient.publish(final_publish_topic, json_buffer, true);
+            delay(100);
+        }
+        delay(100);
     }
 
     mqttClient.disconnect();
